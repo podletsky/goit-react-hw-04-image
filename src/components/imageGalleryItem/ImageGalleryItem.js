@@ -1,42 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../imageGalleryItem/imageGalleryItem.module.css';
 import Modal from '../modal/Modal';
 import PropTypes from 'prop-types';
 
-class GalleryItem extends React.Component {
-  state = {
-    modalOpen: false,
+const GalleryItem = ({ image, modalOpen }) => {
+  const [modalOpenState, setModalState] = useState(false);
+
+  const openModalFunc = () => {
+    setModalState(true);
   };
 
-  openModal = () => {
-    this.setState({ modalOpen: true });
+  const closeModal = () => {
+    setModalState(false);
   };
 
-  closeModal = () => {
-    this.setState({ modalOpen: false });
-  };
-
-  render() {
-    const { image } = this.props;
-    const { modalOpen } = this.state;
-
-    return (
-      <>
-        <li className={styles.item} onClick={this.openModal}>
-          <img
-            className={styles.image}
-            src={image.webformatURL}
-            alt="sdas"
-            width={200}
-          />
-        </li>
-        {modalOpen && (
-          <Modal image={image.largeImageURL} closeModal={this.closeModal} />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <li className={styles.item} onClick={openModalFunc}>
+        <img
+          className={styles.image}
+          src={image.webformatURL}
+          alt={image.tags}
+          width={200}
+        />
+      </li>
+      {modalOpenState && (
+        <Modal image={image.largeImageURL} closeModal={closeModal} />
+      )}
+    </>
+  );
+};
 
 GalleryItem.propTypes = {
   image: PropTypes.shape({
