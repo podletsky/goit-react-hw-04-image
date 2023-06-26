@@ -11,9 +11,11 @@ const App = () => {
   const [images, setImages] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showButton, setShowButton] = useState(true);
+  const [totalImages, setTotalImages] = useState(0);
 
   useEffect(() => {
+    if (!searchValue) return;
+
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -29,23 +31,26 @@ const App = () => {
         if (newImages.length === 0) {
           return;
         }
+
         setImages(prevImages => [...newImages, ...prevImages]);
+        setTotalImages(response.totalHits);
+
         setLoading(false);
       } catch (error) {
+        setLoading(false);
+      } finally {
         setLoading(false);
       }
     };
 
-    if (page !== 1 || searchValue !== '') {
-      fetchData();
-    }
+    fetchData();
   }, [page, searchValue]);
 
   const handleSearch = searchValue => {
     setPage(1);
     setImages([]);
     setSearchValue(searchValue);
-    setShowButton(true);
+    setTotalImages(0);
   };
 
   const handleLoadMore = () => {
@@ -55,16 +60,14 @@ const App = () => {
   const handleImageClick = image => {
     searchValue(image);
   };
-
+  const showButton = !loading && images.length !== totalImages;
   return (
     <div className={styles.container}>
       <Searchbar onSubmit={handleSearch} />
       <div className="imageGallery">
         <ImageGallery images={images} onClick={handleImageClick} />
       </div>
-      {showButton && images.length !== 0 && (
-        <ButtonLoadMore buttonLoadMore={handleLoadMore} />
-      )}
+      {showButton && <ButtonLoadMore buttonLoadMore={handleLoadMore} />}
       {loading && <CustomProgressBar />}
     </div>
   );
