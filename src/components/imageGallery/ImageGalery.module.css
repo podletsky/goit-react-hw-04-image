@@ -1,6 +1,6 @@
 .gallery {
-  flex-wrap: wrap-reverse;
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   list-style: none;
   margin: auto;

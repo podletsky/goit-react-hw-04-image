@@ -1,5 +1,6 @@
 .progressBar {
   display: flex;
   align-items: center;
-  background-color: darkblue;
+  text-align: center;
+  display: none;
 }

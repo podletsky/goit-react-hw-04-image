@@ -32,12 +32,9 @@ const App = () => {
           return;
         }
 
-        setImages(prevImages => [...newImages, ...prevImages]);
+        setImages(prevImages => [...prevImages, ...newImages]);
         setTotalImages(response.totalHits);
-
-        setLoading(false);
       } catch (error) {
-        setLoading(false);
       } finally {
         setLoading(false);
       }
